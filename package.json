@@ -1,0 +1,29 @@
+{
+  "name": "luizalabs-desafio-backend",
+  "version": "1.0.0",
+  "description": "Desafio Backend - LuizaLabs @ CAM",
+  "main": "src/server.js",
+  "repository": "https://github.com/camassucato/luizalabs-desafio-backend.git",
+  "author": "camassucato <c.a.massucato@gmail,com>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon src/server.js"
+  },
+  "private": true,
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "express-async-errors": "^3.1.1",
+    "express-handlebars": "^3.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.4",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-prettier": "^3.1.2",
+    "prettier": "^1.19.1",
+    "sucrase": "^3.12.1"
+  }
+}
