@@ -3,6 +3,9 @@
 // PARSE READER OF Q3ARENA GAME LOGS
 // created by: Carlos Augusto Massucato, aka shakma
 //
+
+import { format, isValid, parse } from 'date-fns';
+
 class OrbbLogParser {
   //
   //
@@ -12,6 +15,137 @@ class OrbbLogParser {
   //
   constructor() {
     this.matches = [];
+  }
+
+  //
+  //
+  //
+  // ORBB WATCHER GET MAP FUNCTION
+  //
+  //
+  watchGetMap(line) {
+    let map;
+    for (let i = 0; i <= line.length; i += 1) {
+      if (line[i] === 'mapname') {
+        map = line[i + 1];
+      }
+    }
+    return map;
+  }
+
+  //
+  //
+  //
+  // ORBB WATCHER CAPTURE LIMIT FUNCTION
+  //
+  //
+  watchGetCapture(line) {
+    let capture;
+    for (let i = 0; i <= line.length; i += 1) {
+      if (line[i] === 'capturelimit') {
+        capture = line[i + 1];
+      }
+    }
+    return capture;
+  }
+
+  //
+  //
+  //
+  // ORBB WATCHER FRAG LIMIT FUNCTION
+  //
+  //
+  watchGetFragLimit(line) {
+    let fraglimit;
+    for (let i = 0; i <= line.length; i += 1) {
+      if (line[i] === 'fraglimit') {
+        fraglimit = line[i + 1];
+      }
+    }
+    return fraglimit;
+  }
+
+  //
+  //
+  //
+  // ORBB WATCHER TIME LIMIT FUNCTION
+  //
+  //
+  watchGetTimeLimit(line) {
+    let timelimit;
+    for (let i = 0; i <= line.length; i += 1) {
+      if (line[i] === 'timelimit') {
+        timelimit = line[i + 1];
+      }
+    }
+    return timelimit;
+  }
+
+  //
+  //
+  //
+  // ORBB WATCHER SERVER HOSTNAME FUNCTION
+  //
+  //
+  watchGetServerHostName(line) {
+    let sv_hostname;
+    for (let i = 0; i <= line.length; i += 1) {
+      if (line[i] === 'sv_hostname') {
+        sv_hostname = line[i + 1];
+      }
+    }
+    return sv_hostname;
+  }
+
+  //
+  //
+  //
+  // ORBB WATCHER MATCH DATEtime FUNCTION
+  //
+  //
+  watchGetMatchDateTime(line) {
+    //
+    // DATE
+    //
+    let matchdate;
+    for (let i = 0; i <= line.length; i += 1) {
+      if (line[i] === 'version') {
+        matchdate = line[i + 1].substr(23);
+      }
+    }
+
+    //
+    // TIME
+    //
+    const matchhour = line[0].split(' ');
+    if (!isValid(parse(matchhour[0], 'HH:mm', new Date()))) {
+      matchhour[0] = '00:00';
+    }
+
+    //
+    // FORMAT DATETIME
+    //
+    const sdate = matchdate.split(' ');
+    const ndate = new Date(
+      `${sdate[2]}-${sdate[0]}-${sdate[1]} ${matchhour[0]}`
+    );
+    matchdate = format(ndate, 'yyyy-MM-dd HH:mm');
+
+    return matchdate;
+  }
+
+  //
+  //
+  //
+  // ORBB WATCHER MATCH HOUR FUNCTION
+  //
+  //
+  watchGetMatchHour(line) {
+    const match_hour = line[0].split(' ');
+    if (isValid(parse(match_hour[0], 'HH:mm', new Date()))) {
+      return match_hour[0];
+    }
+    return '00:00';
   }
 
   //
@@ -124,12 +258,47 @@ class OrbbLogParser {
   //
   watchInitGame(matches, pLine, pGameCount) {
     //
-    // const game = `game_${pGameCount}`;
+    // GET MAP NAME
+    //
+    const map = this.watchGetMap(pLine);
+
+    //
+    // GET CAPTURE LIMIT
+    //
+    const capture_limit = this.watchGetCapture(pLine);
+
+    //
+    // GET FRAG LIMIT
+    //
+    const frag_limit = this.watchGetFragLimit(pLine);
+
+    //
+    // GET TIME LIMIT
+    //
+    const time_limit = this.watchGetTimeLimit(pLine);
+
+    //
+    // GET SERVER HOSTNAME
+    //
+    const sv_hostname = this.watchGetServerHostName(pLine);
+
+    //
+    // GET DATETIME
+    //
+    const match_datetime = this.watchGetMatchDateTime(pLine);
+
+    //
     // POPULATE MATCHES ARRAY
     //
     matches.push({
       game: {
         match_number: pGameCount,
+        match_datetime,
+        map,
+        capture_limit,
+        frag_limit,
+        time_limit,
+        server: sv_hostname,
         total_frags: 0,
         players: [],
         frags: {},
