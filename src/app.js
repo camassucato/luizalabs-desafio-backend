@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import 'express-async-errors';
 import routes from './routes';
+import './database';
 
 class App {
   constructor() {
@@ -16,7 +17,7 @@ class App {
     //
     // EXCEPTIONS
     //
-    this.exceptionHandler();
+    // this.exceptionHandler();
   }
 
   middlewares() {
