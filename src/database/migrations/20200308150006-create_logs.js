@@ -36,10 +36,6 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      total_frags: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-      },
       created_at: {
         type: Sequelize.DATE,
         allowNull: false,

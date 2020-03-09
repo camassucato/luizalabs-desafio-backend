@@ -11,7 +11,6 @@ class OrbbLogs extends Model {
         frag_limit: Sequelize.INTEGER,
         time_limit: Sequelize.INTEGER,
         server: Sequelize.STRING,
-        total_frags: Sequelize.INTEGER,
       },
       {
         tableName: 'orbb_logs',
