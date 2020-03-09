@@ -5,8 +5,6 @@
 //
 
 import { format, isValid, parse } from 'date-fns';
-import OrbbLogs from '../app/models/OrbbLogs';
-import OrbbPlayers from '../app/models/OrbbPlayers';
 
 class OrbbLogParser {
   //
@@ -243,12 +241,20 @@ class OrbbLogParser {
       //
       const fragged = this.watchPlayerFrag(line, 'world');
       matches[matches.length - 1].game.frags[fragged.player] -= 1;
+      //
+      // TO DO: IMPLEMENT ARRAY OF DEATH MESSAGES
+      //
+      // matches[matches.length - 1].game.messages.push(fragged.fragmessage);
     } else {
       //
       // FRAGGER KILLS
       //
       const fragger = this.watchPlayerFrag(line, 'player');
       matches[matches.length - 1].game.frags[fragger.player] += 1;
+      //
+      // TO DO: IMPLEMENT ARRAY OF DEATH MESSAGES
+      //
+      // matches[matches.length - 1].game.messages.push(fragger.fragmessage);
     }
   }
 
@@ -292,6 +298,8 @@ class OrbbLogParser {
     //
     // POPULATE MATCHES ARRAY
     //
+    // TO DO: IMPLEMENT ARRAY OF DEATH MESSAGES
+    //
     matches.push({
       game: {
         match_number: pGameCount,
@@ -304,25 +312,9 @@ class OrbbLogParser {
         total_frags: 0,
         players: [],
         frags: {},
+        // messages: [],
       },
     });
-
-    //
-    // DB PAYLOAD
-    //
-    const payload = {
-      match_number: pGameCount,
-      match_datetime,
-      map,
-      capture_limit,
-      frag_limit,
-      time_limit,
-      server: sv_hostname,
-    };
-    //
-    // POPULATE DB TABLE ORBB_LOGS
-    //
-    OrbbLogs.create(payload);
   }
 
   //
@@ -376,55 +368,6 @@ class OrbbLogParser {
         default:
           break;
       }
-      return null;
-    });
-
-    //
-    // PERFORM ARRAY AND OBJECTS TREATMENT
-    // POPULATE PLAYERS
-    //
-    matches.map(match => {
-      const { players } = match.game;
-      Object.keys(players).map(function createPlayers(player) {
-        //
-        // DB PAYLOAD
-        //
-        const payload = {
-          match_number: match.game.match_number,
-          player: players[player],
-        };
-        //
-        // POPULATE DB TABLE ORBB_PLAYERS
-        //
-        OrbbPlayers.create(payload);
-        return null;
-      });
-      return null;
-    });
-
-    //
-    // PERFORM ARRAY AND OBJECTS TREATMENT
-    // POPULATE PLAYERS FRAGS
-    //
-    matches.map(match => {
-      const { frags } = match.game;
-      Object.keys(frags).map(function updatePlayerFrags(player) {
-        //
-        // UPDATE DB TABLE ORBB_PLAYERS FRAG INFO
-        //
-        OrbbPlayers.update(
-          {
-            frags: frags[player],
-          },
-          {
-            where: {
-              match_number: match.game.match_number,
-              player,
-            },
-          }
-        );
-        return null;
-      });
       return null;
     });
 

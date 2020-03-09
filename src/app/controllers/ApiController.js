@@ -44,6 +44,75 @@ class ApiController {
     //
     const parser = Orbb.watcher(gamelog);
 
+    //
+    // POPULATE DB TABLE ORBB_LOGS
+    //
+    parser.map(match => {
+      const payload = {
+        match_number: match.game.match_number,
+        match_datetime: match.game.match_datetime,
+        map: match.game.map,
+        capture_limit: match.game.capture_limit,
+        frag_limit: match.game.frag_limit,
+        time_limit: match.game.time_limit,
+        server: match.game.server,
+      };
+      OrbbLogs.create(payload);
+      return null;
+    });
+
+    //
+    // POPULATE DB TABLE ORBB_PLAYERS
+    //
+    parser.map(match => {
+      const { players } = match.game;
+      Object.keys(players).map(function createPlayers(player) {
+        //
+        // DB PAYLOAD
+        //
+        const payload_players = {
+          match_number: match.game.match_number,
+          player: players[player],
+        };
+        //
+        // POPULATE DB TABLE ORBB_PLAYERS
+        //
+        OrbbPlayers.create(payload_players);
+        return null;
+      });
+
+      return null;
+    });
+
+    //
+    // UPDATE DB TABLE ORBB_PLAYERS
+    //
+    parser.map(match => {
+      const { frags } = match.game;
+      Object.keys(frags).map(function updatePlayerFrags(player) {
+        //
+        // UPDATE DB TABLE ORBB_PLAYERS WITH FRAG INFO
+        //
+        OrbbPlayers.update(
+          {
+            frags: frags[player],
+          },
+          {
+            where: {
+              match_number: match.game.match_number,
+              player,
+            },
+          }
+        );
+        return null;
+      });
+
+      return null;
+    });
+
+    //
+    // RETURN GAME LOG JSON
+    //
     return res.json(parser);
   }
 
