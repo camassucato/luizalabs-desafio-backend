@@ -4,11 +4,11 @@
 </p>
 
 <h2 align="center">
-  ORBB WATCHER<br>Q3Arena GAMES.LOG Parser
+  ORBB WATCHER<br>Quake3 LOG Parser
 </h2>
 
 <h4 align="center">
-LUIZALABS_DESAFIO_BACKEND<br>Quake3 LOG Parser
+GAMES.LOG Parser
 </h4>
 
 <p>Application created to parser a local games.log of the classic FPS game Quake III Arena. Offers an API of detailed matches information parsed from the log.</p>
