@@ -14,7 +14,7 @@ GAMES.LOG Parser
 <p>Application created to parser a local games.log of the classic FPS game Quake III Arena. Offers an API of detailed matches information parsed from the log.</p>
 
 <p align="center">
-<img alt="GitHub language count" src="https://img.shields.io/github/languages/top/camassucato/luizalabs-desafio-backend?color=%2304D361">
+<img alt="GitHub language count" src="https://img.shields.io/github/languages/top/camassucato/orbbwatcher?color=%2304D361">
 <a href="https://mazz.dev"><img alt="Made by" src="https://img.shields.io/badge/made%20by-Massucato-%2304D361"></a>
 <img alt="License" src="https://img.shields.io/badge/license-MIT-%2304D361">
 </p>
