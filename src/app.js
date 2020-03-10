@@ -1,3 +1,4 @@
+import './bootstrap';
 import express from 'express';
 import cors from 'cors';
 import 'express-async-errors';
@@ -11,13 +12,14 @@ class App {
     //
     this.server = express();
     //
-    // ROUTES
+    // MIDDLEWARE E ROUTERS
     //
+    this.middlewares();
     this.routes();
     //
-    // EXCEPTIONS
+    // EXCEPTION HANDLER
     //
-    // this.exceptionHandler();
+    this.exceptionHandler();
   }
 
   middlewares() {
@@ -26,7 +28,7 @@ class App {
     //
     this.server.use(cors());
     //
-    // JSON
+    // USES JSON
     //
     this.server.use(express.json());
   }
@@ -43,7 +45,7 @@ class App {
   //
   exceptionHandler() {
     this.server.use(async (err, req, res, next) => {
-      return res.status(500).json({ error: 'INTERNAL SERVER ERROR' });
+      return res.status(500).json({ error: 'SERVER INTERNAL ERROR' });
     });
   }
 }

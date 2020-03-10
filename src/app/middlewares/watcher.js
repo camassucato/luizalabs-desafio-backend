@@ -8,9 +8,7 @@ export default async (req, res, next) => {
     attributes: ['id'],
   });
   if (checkLogs == null) {
-    return res
-      .status(404)
-      .json({ error: 'NO `GAMES.LOG` PARSED YET. PLEASE VERIFY API DOCS.' });
+    return res.status(404).json({ error: 'NO `GAMES.LOG` PARSED YET.' });
   }
   return next();
 };

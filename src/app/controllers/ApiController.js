@@ -1,6 +1,7 @@
 import filesys from 'fs';
 import path from 'path';
 import sequelize from 'sequelize';
+import { format } from 'date-fns';
 import Orbb from '../../lib/OrbbLogParser';
 import OrbbPlayers from '../models/OrbbPlayers';
 import OrbbLogs from '../models/OrbbLogs';
@@ -114,6 +115,59 @@ class ApiController {
     // RETURN GAME LOG JSON
     //
     return res.json(parser);
+  }
+
+  //
+  //
+  //
+  // LIST ALL MATCH DETAILS
+  //
+  //
+  async doMatch(req, res) {
+    //
+    // PARSE MATCH DATA
+    //
+    const { match_number } = req.body;
+    if (!match_number) {
+      return res.status(400).json({ error: 'PLEASE INFORM MATCH NUMBER' });
+    }
+    //
+    // QUERY MATCH DATA
+    //
+    const match = await OrbbLogs.findOne({
+      attributes: [
+        'match_number',
+        'match_datetime',
+        'map',
+        'capture_limit',
+        'frag_limit',
+        'time_limit',
+        'server',
+      ],
+      where: {
+        match_number,
+      },
+    });
+    //
+    // 404 IF NOT FOUND
+    //
+    if (!match) {
+      return res.status(404).json({ error: 'MATCH NOT FOUND' });
+    }
+    //
+    // RETURN MATCH DATA
+    //
+    const { map, capture_limit, frag_limit, time_limit, server } = match;
+    const match_datetime = format(match.match_datetime, 'yyyy-MM-dd HH:mm');
+    return res.json({
+      match_number,
+      match_datetime,
+      map,
+      capture_limit,
+      frag_limit,
+      time_limit,
+      server,
+    });
   }
 
   //

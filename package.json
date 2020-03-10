@@ -7,7 +7,14 @@
   "author": "camassucato <c.a.massucato@gmail,com>",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon src/server.js"
+    "prod": "nodemon src/server.js",
+    "dev": "nodemon src/server.js --ignore tests",
+    "pretests": "APP_ENV=test sequelize db:migrate --debug",
+    "tests": "APP_ENV=test jest",
+    "posttests": "APP_ENV=test sequelize db:migrate:undo:all",
+    "pretests_win": "set APP_ENV=test sequelize db:migrate",
+    "tests_win": "set APP_ENV=test jest",
+    "posttests_win": "set APP_ENV=test sequelize db:migrate:undo:all"
   },
   "private": true,
   "dependencies": {
@@ -21,14 +28,20 @@
     "sequelize": "^5.21.5"
   },
   "devDependencies": {
+    "@sucrase/jest-plugin": "^2.0.0",
+    "@types/jest": "^25.1.4",
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-config-prettier": "^6.10.0",
     "eslint-plugin-import": "^2.20.1",
     "eslint-plugin-prettier": "^3.1.2",
+    "jest": "^25.1.0",
+    "jest-json-schema": "^2.1.0",
     "nodemon": "^1.19.4",
     "prettier": "^1.19.1",
     "sequelize-cli": "^5.5.1",
-    "sucrase": "^3.12.1"
+    "sqlite3": "^4.1.1",
+    "sucrase": "^3.12.1",
+    "supertest": "^4.0.2"
   }
 }

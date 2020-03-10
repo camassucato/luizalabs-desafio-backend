@@ -1,64 +1,123 @@
-# Quake log parser
 
-## Task 1 - Construa um parser para o arquivo de log games.log e exponha uma API de consulta.
+<p align="center">
+  <img alt="ORBB_WATCHER" title="ORBB_WATCHER" src="https://mazz.dev/img/orbb.png" width="300px" />
+</p>
 
-O arquivo games.log é gerado pelo servidor de quake 3 arena. Ele registra todas as informações dos jogos, quando um jogo começa, quando termina, quem matou quem, quem morreu pq caiu no vazio, quem morreu machucado, entre outros.
+<h2 align="center">
+  ORBB WATCHER<br>Q3Arena GAMES.LOG Parser
+</h2>
 
-O parser deve ser capaz de ler o arquivo, agrupar os dados de cada jogo, e em cada jogo deve coletar as informações de morte.
+<h4 align="center">
+LUIZALABS_DESAFIO_BACKEND<br>Quake3 LOG Parser
+</h4>
 
-### Exemplo
+<p>Application created to parser a local games.log of the classic FPS game Quake III Arena. Offers an API of detailed matches information parsed from the log.</p>
 
-      21:42 Kill: 1022 2 22: <world> killed Isgalamido by MOD_TRIGGER_HURT
-
-  O player "Isgalamido" morreu pois estava ferido e caiu de uma altura que o matou.
-
-      2:22 Kill: 3 2 10: Isgalamido killed Dono da Bola by MOD_RAILGUN
-
-  O player "Isgalamido" matou o player Dono da Bola usando a arma Railgun.
-
-Para cada jogo o parser deve gerar algo como:
-
-    game_1: {
-        total_kills: 45;
-        players: ["Dono da bola", "Isgalamido", "Zeh"]
-        kills: {
-          "Dono da bola": 5,
-          "Isgalamido": 18,
-          "Zeh": 20
-        }
-      }
+<p align="center">
+<img alt="GitHub language count" src="https://img.shields.io/github/languages/top/camassucato/luizalabs-desafio-backend?color=%2304D361">
+<a href="https://mazz.dev"><img alt="Made by" src="https://img.shields.io/badge/made%20by-Massucato-%2304D361"></a>
+<img alt="License" src="https://img.shields.io/badge/license-MIT-%2304D361">
+</p>
 
 
+## Setup, Run and Tests
+For this project, we make use of <b>yarn</b> and <b>Docker</b> (Postgresql). Assuming that you have those pre installed on your machine, follow these steps:
+<br>
 
-### Observações
+* Run yarn to install the project dependencies:
+```bash
+yarn install
+```
+<br>
 
-1. Quando o `<world>` mata o player ele perde -1 kill.
-2. `<world>` não é um player e não deve aparecer na lista de players e nem no dicionário de kills.
-3. `total_kills` são os kills dos games, isso inclui mortes do `<world>`.
+* Create the Docker container for the database:
+```bash
+docker run --name DB_LUIZALABS_TEST -e POSTGRES_USER=luizalabs -e POSTGRES_PASSWORD=luiza#test! -e POSTGRES_DB=orbbwatcher -p 5432:5432 --restart always -d postgres
+```
+<br>
 
-## Task 2 - Após construir o parser construa uma API que faça a exposição de um método de consulta que retorne um relatório de cada jogo.
+* Environment Variables:
+```bash
+# .env_example to .env
+cp .env_example .env
 
+# .env.test_example to .env.test
+cp .env.test_example .env.test
+```
+<br>
 
-# Requisitos
+* Sequelize to run DB migrations:
+```bash
+yarn sequelize db:migrate
+```
+<br>
 
-1. Use uma das três linguagens: Node.js, Java ou Golang
-2. As APIs deverão seguir o modelo RESTFul com formato JSON
-3. Faça testes unitários, suite de testes bem organizados. (Dica. De uma atenção especial a esse item!)
-4. Use git e tente fazer commits pequenos e bem descritos.
-5. Faça pelo menos um README explicando como fazer o setup, uma explicação da solução proposta, o mínimo de documentação para outro desenvolvedor entender seu código
-6. Siga o que considera boas práticas de programação, coisas que um bom desenvolvedor olhe no seu código e não ache "feio" ou "ruim".
-7. Após concluir o teste suba em um repositório privado e nos mande o link
+* <b>Run the project:</b>
+```bash
+yarn dev
+```
+<br>
 
-HAVE FUN :)
+* <b>Integration tests:</b>
+```bash
+# unix based
+yarn tests
 
+# windows based
+yarn tests_win
+```
+<br>
 
-# CONTAINER DOCKER FOR PGSQL
-Database on a docker container:
+## API Routes
+* Information
+```http
+GET http://localhost:3000/
+```
+<br>
 
-    docker run --name DB_LUIZALABS_TEST -e POSTGRES_USER=luizalabs -e POSTGRES_PASSWORD=luiza#test! -e POSTGRES_DB=orbbwatcher -p 5432:5432 --restart always -d postgres
+* Parser
+```http
+GET http://localhost:3000/parser
+```
+<br>
 
+* Match information
+```http
+POST http://localhost:3000/match
+```
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+| `match_number` | `number` | **Required**. The match number in log |
+<br>
 
-# MIGRATION
-Sequelize to run DB migrations:
+* Players
+```http
+GET http://localhost:3000/players
+```
+<br>
 
-    yarn sequelize db:migrate
+* Maps
+```http
+GET http://localhost:3000/maps
+```
+<br>
+
+* Players Ranking
+```http
+GET http://localhost:3000/ranking
+```
+<br>
+
+## Insomnia Workspace
+You also can import the Insomnia requests.
+```bash
+# on repository root
+Insomnia_2020-03-10.json
+```
+<br>
+
+## Author
+👤 **Carlos Augusto Massucato**
+- [Linkedin](https://www.linkedin.com/in/massucato/)
+- Github: [@camassucato](https://github.com/camassucato)
+- Instagram: [@massucato](https://www.instagram.com/massucato/)
