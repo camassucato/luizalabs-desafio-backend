@@ -1,9 +1,9 @@
 {
-  "name": "luizalabs-desafio-backend",
-  "version": "1.0.0",
-  "description": "Desafio Backend - LuizaLabs @ CAM",
+  "name": "orbbwatcher-log-parser",
+  "version": "1.1.0",
+  "description": "Orbb Watcher - Quake III Arena LOG Parser",
   "main": "src/server.js",
-  "repository": "https://github.com/camassucato/luizalabs-desafio-backend.git",
+  "repository": "https://github.com/camassucato/orbbwatcher.git",
   "author": "camassucato <c.a.massucato@gmail,com>",
   "license": "MIT",
   "scripts": {
